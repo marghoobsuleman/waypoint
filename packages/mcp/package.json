@@ -1,0 +1,13 @@
+{
+  "name": "@waypoint/mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "waypoint-mcp": "src/index.js"
+  },
+  "dependencies": {
+    "@waypoint/core": "*",
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}

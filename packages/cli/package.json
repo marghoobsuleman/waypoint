@@ -1,0 +1,12 @@
+{
+  "name": "@waypoint/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "waypoint": "src/index.js"
+  },
+  "dependencies": {
+    "@waypoint/core": "*"
+  }
+}

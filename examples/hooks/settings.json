@@ -1,0 +1,28 @@
+{
+  "//": "Example Claude Code hooks for automatic Waypoint integration.",
+  "//1": "Merge this into your project's .claude/settings.json (or ~/.claude/settings.json).",
+  "//2": "Replace /ABSOLUTE/PATH/TO/waypoint with your clone path.",
+  "//3": "SessionStart auto-loads 'where was I' into context. Stop logs a session marker.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /ABSOLUTE/PATH/TO/waypoint/packages/cli/src/index.js resume 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /ABSOLUTE/PATH/TO/waypoint/packages/cli/src/index.js log --type progress --body \"Claude Code session ended in $(basename \"$PWD\").\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
