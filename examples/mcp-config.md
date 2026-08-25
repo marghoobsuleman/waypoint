@@ -7,7 +7,8 @@ discovers its tools.
 
 Replace `/ABSOLUTE/PATH/TO/waypoint` with wherever you cloned this repo.
 
-> All clients share the same database (`~/.waypoint/data.db` by default),
+> All clients share the same database (`<project-root>/data.db` by default, or whatever
+> `WAYPOINT_DB` in your `.env` points to),
 > so what the web UI shows and what the AI sees are always identical.
 
 ---
@@ -80,7 +81,8 @@ Point your client at its MCP settings file and add the block above.
 
 ## Making the AI actually use it
 
-Discovering the tools isn't the same as using them. Drop a rules snippet into each
-repo you want tracked so the AI treats logging as part of its workflow — see
-[`rules-snippet.md`](./rules-snippet.md). For fully hands-off logging in Claude Code,
-wire up [`hooks/`](./hooks/).
+Discovering the tools isn't the same as using them. Drop a rules file into each repo
+you want tracked so the AI treats logging as part of its workflow — grab the ready-made
+file for your tool (Claude Code, Codex, Antigravity, Cursor, Windsurf, Copilot) from
+[`rules/`](./rules/). For fully hands-off logging in Claude Code, wire up
+[`hooks/`](./hooks/).

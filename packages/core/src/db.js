@@ -1,24 +1,43 @@
 import { DatabaseSync } from 'node:sqlite';
 import { existsSync, mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { homedir } from 'node:os';
+import { dirname, join, isAbsolute, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// The Waypoint project root, derived from this file's location — NOT from the
+// current working directory. This matters because the MCP server and CLI are
+// launched from arbitrary directories (whatever repo you're in), yet they must
+// all resolve to the *same* project root, .env file, and database.
+const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+
+// Load environment variables from <project-root>/.env if present. Uses Node's
+// built-in env-file loader (Node >= 20.12) — no dependency. Silent if absent.
+try {
+  const envPath = join(PROJECT_ROOT, '.env');
+  if (existsSync(envPath) && typeof process.loadEnvFile === 'function') {
+    process.loadEnvFile(envPath);
+  }
+} catch {
+  /* ignore malformed/missing .env — fall back to shell env + defaults */
+}
 
 /**
  * Resolve the database file path.
  *
  * Priority:
- *   1. WAYPOINT_DB environment variable (absolute path)
- *   2. ~/.waypoint/data.db  (default)
- *
- * A fixed home-directory default matters: the MCP server and CLI are launched
- * from arbitrary working directories (whatever repo you happen to be in), so
- * they must all resolve to the *same* database rather than a cwd-relative one.
+ *   1. WAYPOINT_DB (from .env or the shell). Absolute paths are used as-is;
+ *      relative paths resolve against the project root.
+ *   2. <project-root>/data.db  (default — lives inside the Waypoint project).
  */
 export function resolveDbPath() {
   const fromEnv = process.env.WAYPOINT_DB;
-  if (fromEnv && fromEnv.trim()) return fromEnv.trim();
-  return join(homedir(), '.waypoint', 'data.db');
+  if (fromEnv && fromEnv.trim()) {
+    const p = fromEnv.trim();
+    return isAbsolute(p) ? p : resolve(PROJECT_ROOT, p);
+  }
+  return join(PROJECT_ROOT, 'data.db');
 }
+
+export { PROJECT_ROOT };
 
 let _db = null;
 

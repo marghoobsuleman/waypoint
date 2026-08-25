@@ -20,18 +20,18 @@ log progress **automatically** as you work. Waypoint fills itself in.
 
 ## Features
 
-- 📊 **Dashboard** — every project at a glance: status, days-since-touched (stale
+- **Dashboard** — every project at a glance: status, days-since-touched (stale
   detector), open tasks, and a *"resume here ▶"* hint per project.
-- 📝 **Worklog** — a per-project timeline of progress, blockers, ideas, and decisions.
+- **Worklog** — a per-project timeline of progress, blockers, ideas, and decisions.
   This is the "where was I" memory.
-- ✅ **Next steps** — a lightweight task checklist; the top open task is your resume point.
-- 🤖 **MCP server** — AI editors read context (`resume_project`) and log work
+- **Next steps** — a lightweight task checklist; the top open task is your resume point.
+- **MCP server** — AI editors read context (`resume_project`) and log work
   (`add_worklog_entry`, `complete_task`, …) with **no extension required**.
-- 🪝 **Hooks + CLI** — optional Claude Code hooks make context-loading and logging
+- **Hooks + CLI** — optional Claude Code hooks make context-loading and logging
   fully automatic.
-- 💾 **One SQLite file** — human-friendly, easy to back up. Web UI, REST API, MCP,
+- **One SQLite file** — human-friendly, easy to back up. Web UI, REST API, MCP,
   and CLI all read/write the **same** database.
-- 🔓 **Local-first & open-source (MIT)** — runs on `localhost`, deployable later.
+- **Local-first & open-source (MIT)** — runs on `localhost`, deployable later.
 
 ---
 
@@ -83,13 +83,28 @@ npm start        # serves API + UI together on :4000
 
 ## Data & configuration
 
-- The database lives at `~/.waypoint/data.db` by default. A fixed home-directory
-  location matters: the MCP server and CLI run from whatever repo you're in, and they all
-  need to reach the *same* database.
-- Override the location with the `WAYPOINT_DB` environment variable.
-- Change the API port with `PORT`.
+Configuration is read from a `.env` file in the project root (all values optional).
+Copy the template and edit as needed:
 
 ```bash
+cp .env.example .env
+```
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `WAYPOINT_DB` | `<project-root>/data.db` | SQLite database file. Absolute paths are used as-is; relative paths resolve from the project root. |
+| `PORT` | `4000` | REST API + web UI port (the Vite dev proxy reads it too). |
+
+- **By default the database lives inside the project directory** (`data.db` at the repo
+  root), so a fresh clone just works with no setup — and the file is git-ignored.
+- The path is resolved from the project root (derived from the source location), **not**
+  the current directory — so the MCP server and CLI reach the *same* database no matter
+  which repo you launch them from.
+- Point `WAYPOINT_DB` somewhere shared (e.g. `~/.waypoint/data.db`) if you want one
+  database across multiple Waypoint checkouts.
+
+```bash
+# or set inline without a .env file:
 WAYPOINT_DB=/data/waypoint.db PORT=8080 npm start
 ```
 
@@ -128,10 +143,32 @@ never has to be told which project it's working on.
 ### How it knows *to* log (three levels)
 
 1. **Tool descriptions** nudge the AI to use them (passive).
-2. **A rules snippet** in your repo (`CLAUDE.md`, `.cursor/rules`, …) makes logging part
-   of the AI's workflow — **recommended**. See [`examples/rules-snippet.md`](examples/rules-snippet.md).
+2. **A drop-in rules file** in your repo (`CLAUDE.md`, `AGENTS.md`, `.cursor/rules`, …)
+   makes logging part of the AI's workflow — **recommended**. Ready-to-use files per tool
+   (Claude Code, Codex, Antigravity, Cursor, Windsurf, Copilot) are in
+   [`examples/rules/`](examples/rules/).
 3. **Hooks** (Claude Code) make it fully automatic and deterministic. See
    [`examples/hooks/`](examples/hooks/).
+
+### Drop-in rules files (download)
+
+Grab the ready-made rules file for your editor and copy it to the path shown — that's all
+it takes to make the AI use Waypoint automatically. Full index:
+[`examples/rules/`](examples/rules/).
+
+| Editor | File | Copy it to |
+| --- | --- | --- |
+| Claude Code | [`CLAUDE.md`](examples/rules/CLAUDE.md) | `CLAUDE.md` (repo root) |
+| OpenAI Codex | [`AGENTS.md`](examples/rules/AGENTS.md) | `AGENTS.md` (repo root) |
+| Gemini CLI / Jules / Amp | [`AGENTS.md`](examples/rules/AGENTS.md) | `AGENTS.md` (repo root) |
+| Google Antigravity | [`waypoint.antigravity.md`](examples/rules/waypoint.antigravity.md) | `AGENTS.md` (repo root) |
+| Cursor | [`waypoint.cursor.mdc`](examples/rules/waypoint.cursor.mdc) | `.cursor/rules/waypoint.mdc` |
+| Windsurf | [`waypoint.windsurf.md`](examples/rules/waypoint.windsurf.md) | `.windsurf/rules/waypoint.md` |
+| GitHub Copilot | [`copilot-instructions.md`](examples/rules/copilot-instructions.md) | `.github/copilot-instructions.md` |
+| Cline | [`waypoint.cline.md`](examples/rules/waypoint.cline.md) | `.clinerules/waypoint.md` |
+| Aider | [`waypoint.aider.md`](examples/rules/waypoint.aider.md) | `CONVENTIONS.md` (load with `--read`) |
+| JetBrains AI (Junie) | [`waypoint.junie.md`](examples/rules/waypoint.junie.md) | `.junie/guidelines.md` |
+| Zed | [`waypoint.zed.md`](examples/rules/waypoint.zed.md) | `.rules` (repo root) |
 
 ### MCP tools
 

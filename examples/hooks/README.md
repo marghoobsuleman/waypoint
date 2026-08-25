@@ -11,7 +11,7 @@ events, so context loads and logs happen whether or not the AI "remembers" to.
 - **`Stop`** → appends a lightweight worklog marker when a session ends.
 
 > The `Stop` marker is intentionally generic — for *meaningful* end-of-session notes,
-> keep the [rules snippet](../rules-snippet.md) so the AI writes a real summary via
+> keep the [rules file](../rules/) so the AI writes a real summary via
 > `add_worklog_entry`. Hooks give you the deterministic floor; the rules give you
 > quality. Use both.
 
