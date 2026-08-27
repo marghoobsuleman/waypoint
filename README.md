@@ -31,7 +31,6 @@ log progress **automatically** as you work. Waypoint fills itself in.
   fully automatic.
 - **One SQLite file** — human-friendly, easy to back up. Web UI, REST API, MCP,
   and CLI all read/write the **same** database.
-- **Local-first & open-source (MIT)** — runs on `localhost`, deployable later.
 
 ---
 
@@ -219,7 +218,22 @@ is untouched:
 
 ```bash
 claude mcp list             # see configured servers (and their scope)
-claude mcp remove waypoint  # add -s user or -s project if it was added with that scope
+claude mcp remove waypoint  # add -s local / -s user / -s project for a specific scope
+```
+
+If the same name was added in **more than one scope**, `claude mcp remove waypoint` will
+refuse and list them — remove each one explicitly (local wins over user when both exist):
+
+```bash
+claude mcp remove waypoint -s local
+claude mcp remove waypoint -s user
+```
+
+**Switching the `waypoint` command** (e.g. host → Docker) fails with *"already exists"* —
+remove it first, then re-add, or use a different name so both can coexist:
+
+```bash
+claude mcp add waypoint-docker -- docker exec -i waypoint node packages/mcp/src/index.js
 ```
 
 #### Running Waypoint in Docker?
