@@ -106,6 +106,68 @@ npm start        # serves API + UI together on :4000
 
 ---
 
+## Run with Docker
+
+A `Dockerfile` (multi-stage, `node:24-alpine`) builds the dashboard and serves the API +
+UI from a single process. The SQLite database lives on a mounted volume, so your data
+survives container rebuilds.
+
+**Docker Compose (recommended):**
+
+```bash
+docker compose up -d --build
+```
+
+Open **http://localhost:4000**. By default the database is stored in a Docker-managed
+named volume (`waypoint-data`).
+
+### Choosing where the data lives
+
+Inside the container the database always lives under `/data`. Where `/data` comes from
+on the host is configurable (set these in `.env` or your shell):
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `WAYPOINT_DATA_DIR` | named volume `waypoint-data` | Host directory bind-mounted to `/data`. Set an **absolute path** to reuse an existing database folder. |
+| `WAYPOINT_DB_FILE` | `data.db` | SQLite filename inside `/data` (container runs with `WAYPOINT_DB=/data/<this>`). |
+
+**Reuse an existing database** — point `WAYPOINT_DATA_DIR` at the folder that *contains*
+your `data.db`:
+
+```bash
+# .env
+WAYPOINT_DATA_DIR=/Users/you/www/databases-data/waypoint-dbi
+WAYPOINT_DB_FILE=data.db
+```
+
+```bash
+docker compose up -d --build   # now reads/writes your existing data.db
+```
+
+> Don't run the host process and the container against the same SQLite file **at the
+> same time** — use one or the other to avoid write conflicts.
+
+**Plain Docker** (bind-mount the directory, not the file):
+
+```bash
+docker build -t waypoint .
+docker run -d --name waypoint -p 4000:4000 \
+  -v /Users/you/www/databases-data/waypoint-dbi:/data \
+  -e WAYPOINT_DB=/data/data.db \
+  waypoint
+```
+
+Every other [configuration variable](#data--configuration) works via `-e` too (e.g.
+`-e PORT=8080 -e WAYPOINT_DEFAULT_FILTER=paused`). The image exposes a `/api/health`
+healthcheck.
+
+> **MCP over Docker:** the dashboard runs in the container, but the MCP server is a stdio
+> subprocess the editor launches — you can run it on the host (sharing the same DB) or
+> through Docker. See [Running Waypoint in Docker?](#running-waypoint-in-docker) under
+> *Connect your AI editor*.
+
+---
+
 ## Data & configuration
 
 Configuration is read from a `.env` file in the project root (all values optional).
@@ -151,6 +213,36 @@ One config entry — **no browser extension**. Full per-tool instructions in
 ```bash
 claude mcp add waypoint -- node /ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/index.js
 ```
+
+#### Running Waypoint in Docker?
+
+The MCP server talks over **stdio** — the editor launches it as a subprocess, it is not
+reached over a port. The container runs the *web/API* server, a different entrypoint, so
+Claude can't attach to it over `:4000`. Pick one of these:
+
+- **Host MCP, shared DB (simplest).** Keep the command above. Because the MCP server,
+  the container, and the CLI all read the same SQLite file (`WAYPOINT_DB` →
+  `WAYPOINT_DATA_DIR`), the host MCP process already sees the same data as the Docker
+  dashboard. Nothing extra to configure.
+
+- **MCP inside the running container** (`docker compose up` first):
+
+  ```bash
+  claude mcp add waypoint -- docker exec -i waypoint node packages/mcp/src/index.js
+  ```
+
+- **MCP as a self-contained container** (no web container needed; fresh per session):
+
+  ```bash
+  claude mcp add waypoint -- docker run -i --rm \
+    -e WAYPOINT_DB=/data/data.db \
+    -v /ABSOLUTE/PATH/TO/waypoint-data:/data \
+    waypoint node packages/mcp/src/index.js
+  ```
+
+The `-i` flag is **required** (stdio needs stdin open); do **not** pass `-t`. Whichever
+you choose, keep to **one writer at a time** on the SQLite file — don't run a host
+`npm start` and a container against the same DB simultaneously.
 
 **Cursor / Antigravity / Windsurf** — add to the tool's `mcp.json`:
 

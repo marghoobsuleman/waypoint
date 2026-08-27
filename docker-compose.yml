@@ -1,0 +1,32 @@
+# Run Waypoint with a single command:  docker compose up -d --build
+# API + web UI on http://localhost:${PORT:-4000}.
+#
+# The SQLite database lives at /data inside the container. Where /data comes from
+# on the host is configurable via WAYPOINT_DATA_DIR (set it in .env or the shell):
+#   • unset            → the named volume "waypoint-data" (managed by Docker)
+#   • an absolute path → bind-mounts that host directory (reuse an existing DB)
+# The DB filename inside /data is WAYPOINT_DB_FILE (default: data.db).
+#
+# NOTE: compose deliberately does NOT read WAYPOINT_DB from .env — that variable
+# holds a *host* path used when running Waypoint outside Docker, which is not
+# valid inside the container. The container path is built from the vars below.
+services:
+  waypoint:
+    build: .
+    image: waypoint
+    container_name: waypoint
+    ports:
+      - "${PORT:-4000}:${PORT:-4000}"
+    environment:
+      PORT: "${PORT:-4000}"
+      WAYPOINT_DB: "/data/${WAYPOINT_DB_FILE:-data.db}"
+      WAYPOINT_FILTERS: "${WAYPOINT_FILTERS:-all,active,paused,done,archived}"
+      WAYPOINT_DEFAULT_FILTER: "${WAYPOINT_DEFAULT_FILTER:-active}"
+    volumes:
+      - "${WAYPOINT_DATA_DIR:-waypoint-data}:/data"
+    restart: unless-stopped
+
+volumes:
+  # Used only when WAYPOINT_DATA_DIR is unset (the default). A bind-mount path
+  # in WAYPOINT_DATA_DIR bypasses this named volume entirely.
+  waypoint-data:
