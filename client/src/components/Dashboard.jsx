@@ -4,14 +4,29 @@ import { api } from '../lib/api.js';
 import { relativeTime, STATUS_META, staleClass } from '../lib/format.js';
 import NewProjectModal from './NewProjectModal.jsx';
 
-const FILTERS = ['all', 'active', 'paused', 'done'];
+const DEFAULT_FILTERS = ['all', 'active', 'paused', 'done', 'archived'];
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
-  const [filter, setFilter] = useState('all');
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [filter, setFilter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showNew, setShowNew] = useState(false);
   const [error, setError] = useState(null);
+
+  // Filters and the default selection are configurable via .env (see /api/config).
+  useEffect(() => {
+    let cancelled = false;
+    api.getConfig()
+      .then((cfg) => {
+        if (cancelled) return;
+        const list = cfg.filters?.length ? cfg.filters : DEFAULT_FILTERS;
+        setFilters(list);
+        setFilter(cfg.defaultFilter || list[0]);
+      })
+      .catch(() => { if (!cancelled) setFilter('active'); });
+    return () => { cancelled = true; };
+  }, []);
 
   async function load() {
     setLoading(true);
@@ -25,7 +40,7 @@ export default function Dashboard() {
     }
   }
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [filter]);
+  useEffect(() => { if (filter) load(); /* eslint-disable-next-line */ }, [filter]);
 
   const stats = {
     total: projects.length,
@@ -52,7 +67,7 @@ export default function Dashboard() {
       </div>
 
       <div className="filters">
-        {FILTERS.map((f) => (
+        {filters.map((f) => (
           <button key={f} className={`chip ${filter === f ? 'chip-active' : ''}`} onClick={() => setFilter(f)}>
             {f[0].toUpperCase() + f.slice(1)}
           </button>

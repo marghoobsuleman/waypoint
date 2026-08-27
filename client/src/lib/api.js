@@ -16,6 +16,7 @@ async function req(path, options = {}) {
 }
 
 export const api = {
+  getConfig: () => req('/config'),
   listProjects: (status) => req(`/projects${status ? `?status=${status}` : ''}`),
   getProject: (id) => req(`/projects/${id}`),
   createProject: (data) => req('/projects', { method: 'POST', body: data }),

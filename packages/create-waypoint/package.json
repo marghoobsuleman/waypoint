@@ -1,0 +1,23 @@
+{
+  "name": "create-waypoint",
+  "version": "0.1.0",
+  "description": "Scaffold a local Waypoint project tracker in one command (npm create waypoint).",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "create-waypoint": "index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "keywords": [
+    "waypoint",
+    "project-tracker",
+    "mcp",
+    "scaffold",
+    "create"
+  ]
+}

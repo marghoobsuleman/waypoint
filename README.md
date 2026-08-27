@@ -60,10 +60,35 @@ waypoint/
 
 ## Quick start
 
-**Requirements:** Node **≥ 22.5** (uses the built-in `node:sqlite` — no native build step).
+**Requirements:** Node **≥ 22.5** (uses the built-in `node:sqlite` — no native build step)
+and `git` on your `PATH`.
+
+### One command (recommended)
 
 ```bash
-git clone <your-fork-url> waypoint
+npm create waypoint@latest
+```
+
+This scaffolds Waypoint into a new `waypoint/` folder, installs dependencies, and creates
+a `.env` for you. Then:
+
+```bash
+cd waypoint
+npm run dev      # API on :4000, web UI on :5173
+```
+
+Pass a folder name and options if you like — `npm create waypoint@latest my-tracker --seed`.
+See [`packages/create-waypoint`](packages/create-waypoint) for all flags. Until it's
+published to npm, run it straight from GitHub:
+
+```bash
+npx github:marghoobsuleman/waypoint/packages/create-waypoint
+```
+
+### Manual clone
+
+```bash
+git clone https://github.com/marghoobsuleman/waypoint.git
 cd waypoint
 npm install
 npm run seed     # optional: adds a couple of sample projects
@@ -94,6 +119,8 @@ cp .env.example .env
 | --- | --- | --- |
 | `WAYPOINT_DB` | `<project-root>/data.db` | SQLite database file. Absolute paths are used as-is; relative paths resolve from the project root. |
 | `PORT` | `4000` | REST API + web UI port (the Vite dev proxy reads it too). |
+| `WAYPOINT_FILTERS` | `all,active,paused,done,archived` | Status filter chips shown on the dashboard, comma-separated. `all` lists everything except archived projects. |
+| `WAYPOINT_DEFAULT_FILTER` | `active` | Which filter is selected when the dashboard first loads (must be one of `WAYPOINT_FILTERS`). |
 
 - **By default the database lives inside the project directory** (`data.db` at the repo
   root), so a fresh clone just works with no setup — and the file is git-ignored.
@@ -102,6 +129,10 @@ cp .env.example .env
   which repo you launch them from.
 - Point `WAYPOINT_DB` somewhere shared (e.g. `~/.waypoint/data.db`) if you want one
   database across multiple Waypoint checkouts.
+- **Dashboard filters are configurable** via `WAYPOINT_FILTERS` and
+  `WAYPOINT_DEFAULT_FILTER` — served to the UI at `GET /api/config`, so a change takes
+  effect on refresh with no rebuild. Valid statuses: `active`, `paused`, `done`,
+  `archived` (plus the virtual `all`).
 
 ```bash
 # or set inline without a .env file:
@@ -207,6 +238,7 @@ Base URL `http://localhost:4000/api`.
 
 | Method | Path | Description |
 | --- | --- | --- |
+| GET | `/config` | Dashboard UI config (`filters`, `defaultFilter`) from `.env` |
 | GET | `/projects` | List (optional `?status=`) |
 | POST | `/projects` | Create |
 | GET | `/projects/:id` | Get one (by id or slug) |

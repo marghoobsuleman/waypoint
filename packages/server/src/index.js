@@ -40,6 +40,19 @@ const api = express.Router();
 
 api.get('/health', (req, res) => res.json({ ok: true, db: resolveDbPath() }));
 
+// UI config sourced from .env, so the dashboard's filters stay configurable.
+const VALID_FILTERS = ['all', 'active', 'paused', 'done', 'archived'];
+api.get('/config', (req, res) => {
+  const filters = (process.env.WAYPOINT_FILTERS || 'all,active,paused,done,archived')
+    .split(',')
+    .map((f) => f.trim().toLowerCase())
+    .filter((f) => VALID_FILTERS.includes(f));
+  const list = filters.length ? filters : ['all', 'active', 'paused', 'done', 'archived'];
+  const requested = (process.env.WAYPOINT_DEFAULT_FILTER || 'active').trim().toLowerCase();
+  const defaultFilter = list.includes(requested) ? requested : list[0];
+  res.json({ filters: list, defaultFilter });
+});
+
 // Projects
 api.get('/projects', h((req) => listProjects({ status: req.query.status })));
 api.post('/projects', h((req, res) => {
