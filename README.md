@@ -214,6 +214,14 @@ One config entry — **no browser extension**. Full per-tool instructions in
 claude mcp add waypoint -- node /ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/index.js
 ```
 
+**Remove / disconnect** — this only unregisters the server in Claude Code; your database
+is untouched:
+
+```bash
+claude mcp list             # see configured servers (and their scope)
+claude mcp remove waypoint  # add -s user or -s project if it was added with that scope
+```
+
 #### Running Waypoint in Docker?
 
 The MCP server talks over **stdio** — the editor launches it as a subprocess, it is not
