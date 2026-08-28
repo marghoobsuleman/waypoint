@@ -7,7 +7,6 @@
     "waypoint-mcp": "src/index.js"
   },
   "dependencies": {
-    "@waypoint/core": "*",
     "@modelcontextprotocol/sdk": "^1.12.0"
   }
 }

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import express from 'express';
 import cors from 'cors';
 import { existsSync } from 'node:fs';
@@ -19,7 +20,7 @@ import {
   deleteTask,
   resumeProject,
   resolveDbPath,
-} from '@waypoint/core';
+} from '../../core/src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();

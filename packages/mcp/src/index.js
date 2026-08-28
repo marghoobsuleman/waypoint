@@ -16,7 +16,7 @@ import {
   resumeProject,
   resumeToMarkdown,
   findProjectByPath,
-} from '@waypoint/core';
+} from '../../core/src/index.js';
 
 const server = new Server(
   { name: 'waypoint', version: '0.1.0' },

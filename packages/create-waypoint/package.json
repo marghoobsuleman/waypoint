@@ -1,10 +1,10 @@
 {
   "name": "create-waypoint",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Scaffold a local Waypoint project tracker in one command (npm create waypoint).",
   "type": "module",
   "license": "MIT",
-  "author": "Marghoob Suleman",
+  "author": "Marghoob Suleman <marghoobsuleman@gmail.com>",
   "homepage": "https://github.com/marghoobsuleman/waypoint/tree/main/packages/create-waypoint#readme",
   "repository": {
     "type": "git",
@@ -18,7 +18,8 @@
     "create-waypoint": "index.js"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "README.md"
   ],
   "engines": {
     "node": ">=22.5.0"
@@ -28,6 +29,10 @@
     "project-tracker",
     "mcp",
     "scaffold",
-    "create"
-  ]
+    "create",
+    "cli"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

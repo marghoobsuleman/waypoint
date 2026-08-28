@@ -11,7 +11,7 @@ import {
   resumeProject,
   resumeToMarkdown,
   findProjectByPath,
-} from '@waypoint/core';
+} from '../../core/src/index.js';
 
 const [, , cmd, ...rest] = process.argv;
 

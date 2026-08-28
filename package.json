@@ -1,12 +1,50 @@
 {
-  "name": "waypoint",
-  "version": "0.1.0",
-  "private": true,
-  "description": "A local-first project waypoint with a web dashboard, REST API, and an MCP server so AI editors (Claude Code, Cursor, Antigravity) can read and log your project context automatically.",
+  "name": "@marghoobsuleman/waypoint",
+  "version": "1.0.0",
+  "description": "A local-first project tracker with a web dashboard, REST API, and an MCP server so AI editors (Claude Code, Cursor, Antigravity) can read and log your project context automatically.",
   "type": "module",
   "license": "MIT",
+  "author": {
+    "name": "Marghoob Suleman",
+    "email": "marghoobsuleman@gmail.com",
+    "url": "https://github.com/marghoobsuleman"
+  },
+  "homepage": "https://github.com/marghoobsuleman/waypoint#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marghoobsuleman/waypoint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marghoobsuleman/waypoint/issues"
+  },
+  "keywords": [
+    "waypoint",
+    "project-tracker",
+    "mcp",
+    "model-context-protocol",
+    "claude-code",
+    "cursor",
+    "dashboard",
+    "sqlite"
+  ],
   "engines": {
     "node": ">=22.5.0"
+  },
+  "main": "packages/core/src/index.js",
+  "bin": {
+    "waypoint": "packages/cli/src/index.js",
+    "waypoint-mcp": "packages/mcp/src/index.js",
+    "waypoint-server": "packages/server/src/index.js"
+  },
+  "files": [
+    "packages",
+    "client/dist",
+    ".env.example",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "workspaces": [
     "packages/core",
@@ -24,7 +62,13 @@
     "start": "node packages/server/src/index.js",
     "mcp": "node packages/mcp/src/index.js",
     "waypoint": "node packages/cli/src/index.js",
-    "seed": "node packages/core/src/seed.js"
+    "seed": "node packages/core/src/seed.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

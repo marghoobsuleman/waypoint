@@ -27,7 +27,7 @@ export default function Layout() {
         </Link>
         <nav className="topnav">
           <Link to="/" className={loc.pathname === '/' ? 'active' : ''}>Dashboard</Link>
-          <a href="https://github.com" target="_blank" rel="noreferrer">Docs</a>
+          <a href="https://github.com/marghoobsuleman/waypoint" target="_blank" rel="noreferrer">Docs</a>
         </nav>
       </header>
       <main className="content">

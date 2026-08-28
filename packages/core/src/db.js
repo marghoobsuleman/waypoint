@@ -29,11 +29,25 @@ try {
  *   2. <project-root>/data.db  (default — lives inside the Waypoint project).
  */
 export function resolveDbPath() {
+  // 1. WAYPOINT_DB — an explicit full path wins. This is how the Docker
+  //    container points core at the mounted file (WAYPOINT_DB=/data/data.db).
+  //    Absolute paths are used as-is; relative paths resolve from the root.
   const fromEnv = process.env.WAYPOINT_DB;
   if (fromEnv && fromEnv.trim()) {
     const p = fromEnv.trim();
     return isAbsolute(p) ? p : resolve(PROJECT_ROOT, p);
   }
+  // 2. WAYPOINT_DATA_DIR (+ WAYPOINT_DB_FILE) — the single source of truth
+  //    shared with docker-compose.yml, so a local run and the container both
+  //    resolve to the same database. The directory holds data.db and its
+  //    -wal/-shm sidecar files, which is why Docker mounts the folder.
+  const dataDir = process.env.WAYPOINT_DATA_DIR;
+  if (dataDir && dataDir.trim()) {
+    const base = dataDir.trim();
+    const file = (process.env.WAYPOINT_DB_FILE || 'data.db').trim();
+    return isAbsolute(base) ? join(base, file) : resolve(PROJECT_ROOT, base, file);
+  }
+  // 3. Default — inside the project directory.
   return join(PROJECT_ROOT, 'data.db');
 }
 

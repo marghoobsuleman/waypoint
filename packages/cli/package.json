@@ -5,8 +5,5 @@
   "main": "src/index.js",
   "bin": {
     "waypoint": "src/index.js"
-  },
-  "dependencies": {
-    "@waypoint/core": "*"
   }
 }
