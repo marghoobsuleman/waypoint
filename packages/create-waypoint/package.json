@@ -4,6 +4,16 @@
   "description": "Scaffold a local Waypoint project tracker in one command (npm create waypoint).",
   "type": "module",
   "license": "MIT",
+  "author": "Marghoob Suleman",
+  "homepage": "https://github.com/marghoobsuleman/waypoint/tree/main/packages/create-waypoint#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marghoobsuleman/waypoint.git",
+    "directory": "packages/create-waypoint"
+  },
+  "bugs": {
+    "url": "https://github.com/marghoobsuleman/waypoint/issues"
+  },
   "bin": {
     "create-waypoint": "index.js"
   },
