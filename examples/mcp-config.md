@@ -34,6 +34,42 @@ claude mcp add waypoint -- node /ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/inde
 }
 ```
 
+## Google Antigravity
+
+Add the server to your global Antigravity MCP configuration in `~/.gemini/config/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "waypoint": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/index.js"]
+    }
+  }
+}
+```
+
+**Running Waypoint in Docker?** Use `docker exec -i`:
+
+```json
+{
+  "mcpServers": {
+    "waypoint": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "waypoint",
+        "node",
+        "packages/mcp/src/index.js"
+      ]
+    }
+  }
+}
+```
+
+*(Optional)* **As a workspace plugin:** If you want to bundle Waypoint inside a specific project, create `.agents/plugins/waypoint/plugin.json` (`{ "name": "waypoint" }`) and `.agents/plugins/waypoint/mcp_config.json` with the `mcpServers` block above.
+
 ## Cursor
 
 `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (per-project):
@@ -49,9 +85,22 @@ claude mcp add waypoint -- node /ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/inde
 }
 ```
 
-## Antigravity / Windsurf / other MCP clients
+**Running in Docker:**
 
-Any MCP client uses the same shape — a `command` + `args` stdio server:
+```json
+{
+  "mcpServers": {
+    "waypoint": {
+      "command": "docker",
+      "args": ["exec", "-i", "waypoint", "node", "packages/mcp/src/index.js"]
+    }
+  }
+}
+```
+
+## Windsurf / other MCP clients
+
+Any standard MCP client uses the same shape — a `command` + `args` stdio server:
 
 ```json
 {

@@ -266,7 +266,22 @@ The `-i` flag is **required** (stdio needs stdin open); do **not** pass `-t`. Wh
 you choose, keep to **one writer at a time** on the SQLite file — don't run a host
 `npm start` and a container against the same DB simultaneously.
 
-**Cursor / Antigravity / Windsurf** — add to the tool's `mcp.json`:
+**Google Antigravity** — add to `~/.gemini/config/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "waypoint": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/index.js"]
+    }
+  }
+}
+```
+
+*(If running Waypoint in Docker, use `"command": "docker"` and `"args": ["exec", "-i", "waypoint", "node", "packages/mcp/src/index.js"]`)*.
+
+**Cursor / Windsurf / other MCP clients** — add to the tool's `mcp.json` (e.g. `~/.cursor/mcp.json`):
 
 ```json
 {
