@@ -266,6 +266,32 @@ The `-i` flag is **required** (stdio needs stdin open); do **not** pass `-t`. Wh
 you choose, keep to **one writer at a time** on the SQLite file — don't run a host
 `npm start` and a container against the same DB simultaneously.
 
+**VS Code (GitHub Copilot)** — add to `.vscode/mcp.json` or User MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "waypoint": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/index.js"]
+    }
+  }
+}
+```
+
+**IntelliJ IDEA & JetBrains IDEs** — configure in **Settings > Tools > Model Context Protocol (MCP)** or `.idea/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "waypoint": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/waypoint/packages/mcp/src/index.js"]
+    }
+  }
+}
+```
+
 **Google Antigravity** — add to `~/.gemini/config/mcp_config.json`:
 
 ```json
@@ -279,9 +305,7 @@ you choose, keep to **one writer at a time** on the SQLite file — don't run a 
 }
 ```
 
-*(If running Waypoint in Docker, use `"command": "docker"` and `"args": ["exec", "-i", "waypoint", "node", "packages/mcp/src/index.js"]`)*.
-
-**Cursor / Windsurf / other MCP clients** — add to the tool's `mcp.json` (e.g. `~/.cursor/mcp.json`):
+**Cursor / Windsurf / Trae / other MCP clients** — add to the tool's `mcp.json` (e.g. `~/.cursor/mcp.json`, `~/.codeium/windsurf/mcp_config.json`, or `~/.trae/mcp.json`):
 
 ```json
 {
@@ -294,6 +318,8 @@ you choose, keep to **one writer at a time** on the SQLite file — don't run a 
 }
 ```
 
+*(If running Waypoint in Docker for any editor above, set `"command": "docker"` and `"args": ["exec", "-i", "waypoint", "node", "packages/mcp/src/index.js"]`)*.
+
 ### How it knows *which* project you're in
 
 Set a project's **local path** (in the web UI, or `waypoint link <slug> --path .` from the
@@ -305,7 +331,7 @@ never has to be told which project it's working on.
 1. **Tool descriptions** nudge the AI to use them (passive).
 2. **A drop-in rules file** in your repo (`CLAUDE.md`, `AGENTS.md`, `.cursor/rules`, …)
    makes logging part of the AI's workflow — **recommended**. Ready-to-use files per tool
-   (Claude Code, Codex, Antigravity, Cursor, Windsurf, Copilot) are in
+   (Claude Code, Codex, Antigravity, IntelliJ/JetBrains, VS Code, Cursor, Windsurf, Trae, Copilot) are in
    [`examples/rules/`](examples/rules/).
 3. **Hooks** (Claude Code) make it fully automatic and deterministic. See
    [`examples/hooks/`](examples/hooks/).
@@ -316,18 +342,22 @@ Grab the ready-made rules file for your editor and copy it to the path shown —
 it takes to make the AI use Waypoint automatically. Full index:
 [`examples/rules/`](examples/rules/).
 
-| Editor | File | Copy it to |
+| Editor / Tool | File | Copy it to |
 | --- | --- | --- |
 | Claude Code | [`CLAUDE.md`](examples/rules/CLAUDE.md) | `CLAUDE.md` (repo root) |
-| OpenAI Codex | [`AGENTS.md`](examples/rules/AGENTS.md) | `AGENTS.md` (repo root) |
-| Gemini CLI / Jules / Amp | [`AGENTS.md`](examples/rules/AGENTS.md) | `AGENTS.md` (repo root) |
 | Google Antigravity | [`waypoint.antigravity.md`](examples/rules/waypoint.antigravity.md) | `AGENTS.md` (repo root) |
+| IntelliJ IDEA & JetBrains (Junie / AI Assistant) | [`waypoint.junie.md`](examples/rules/waypoint.junie.md) | `.junie/guidelines.md` (or `.idea/prompts`) |
+| IntelliJ IDEA & JetBrains (Copilot) | [`copilot-instructions.md`](examples/rules/copilot-instructions.md) | `.github/copilot-instructions.md` |
+| VS Code (GitHub Copilot) | [`copilot-instructions.md`](examples/rules/copilot-instructions.md) | `.github/copilot-instructions.md` |
+| VS Code (Cline) | [`waypoint.cline.md`](examples/rules/waypoint.cline.md) | `.clinerules/waypoint.md` |
+| VS Code (Roo Code) | [`waypoint.roo.md`](examples/rules/waypoint.roo.md) | `.clinerules/waypoint.md` (or `.roomodes`) |
+| VS Code & JetBrains (Continue.dev) | [`waypoint.continue.md`](examples/rules/waypoint.continue.md) | `.continue/prompts/waypoint.md` |
 | Cursor | [`waypoint.cursor.mdc`](examples/rules/waypoint.cursor.mdc) | `.cursor/rules/waypoint.mdc` |
 | Windsurf | [`waypoint.windsurf.md`](examples/rules/waypoint.windsurf.md) | `.windsurf/rules/waypoint.md` |
-| GitHub Copilot | [`copilot-instructions.md`](examples/rules/copilot-instructions.md) | `.github/copilot-instructions.md` |
-| Cline | [`waypoint.cline.md`](examples/rules/waypoint.cline.md) | `.clinerules/waypoint.md` |
+| Trae (ByteDance) | [`waypoint.trae.md`](examples/rules/waypoint.trae.md) | `.trae/rules` (or `.traerules`) |
+| OpenAI Codex | [`AGENTS.md`](examples/rules/AGENTS.md) | `AGENTS.md` (repo root) |
+| Gemini CLI / Jules / Amp | [`AGENTS.md`](examples/rules/AGENTS.md) | `AGENTS.md` (repo root) |
 | Aider | [`waypoint.aider.md`](examples/rules/waypoint.aider.md) | `CONVENTIONS.md` (load with `--read`) |
-| JetBrains AI (Junie) | [`waypoint.junie.md`](examples/rules/waypoint.junie.md) | `.junie/guidelines.md` |
 | Zed | [`waypoint.zed.md`](examples/rules/waypoint.zed.md) | `.rules` (repo root) |
 
 ### MCP tools

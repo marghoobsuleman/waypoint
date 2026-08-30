@@ -1,7 +1,6 @@
 <!--
-  Waypoint rules for JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm, PhpStorm, GoLand, etc.) via JetBrains AI / Junie / AI Assistant.
-  Copy this file to:  .junie/guidelines.md  in the repo you want tracked.
-  (For plain AI Assistant / custom prompts, paste the "## Waypoint" section into your project prompt or .idea/prompts.)
+  Waypoint rules for Trae (ByteDance AI IDE).
+  Copy this file to:  .trae/rules  or  .traerules  in the repo you want tracked.
   Requires the Waypoint MCP server — see examples/mcp-config.md.
 -->
 

@@ -7,18 +7,22 @@ it to the path shown, and you're done.
 > These make the AI **behave**. They assume the Waypoint **MCP server** is already
 > connected — set that up first via [`../mcp-config.md`](../mcp-config.md).
 
-| Tool | Download this file | Copy it to (in your repo) |
+| Tool / Editor | Download this file | Copy it to (in your repo) |
 | --- | --- | --- |
 | **Claude Code** | [`CLAUDE.md`](./CLAUDE.md) | `CLAUDE.md` (repo root) |
-| **OpenAI Codex** | [`AGENTS.md`](./AGENTS.md) | `AGENTS.md` (repo root) |
-| **Gemini CLI / Jules / Amp** | [`AGENTS.md`](./AGENTS.md) | `AGENTS.md` (repo root) |
 | **Google Antigravity** | [`waypoint.antigravity.md`](./waypoint.antigravity.md) | `AGENTS.md` (repo root) |
+| **IntelliJ IDEA & JetBrains IDEs** (JetBrains AI / Junie) | [`waypoint.junie.md`](./waypoint.junie.md) | `.junie/guidelines.md` (or `.idea/prompts`) |
+| **IntelliJ IDEA & JetBrains IDEs** (GitHub Copilot) | [`copilot-instructions.md`](./copilot-instructions.md) | `.github/copilot-instructions.md` |
+| **VS Code** (GitHub Copilot) | [`copilot-instructions.md`](./copilot-instructions.md) | `.github/copilot-instructions.md` |
+| **VS Code** (Cline) | [`waypoint.cline.md`](./waypoint.cline.md) | `.clinerules/waypoint.md` |
+| **VS Code** (Roo Code) | [`waypoint.roo.md`](./waypoint.roo.md) | `.clinerules/waypoint.md` (or `.roomodes`) |
+| **VS Code & JetBrains** (Continue.dev) | [`waypoint.continue.md`](./waypoint.continue.md) | `.continue/prompts/waypoint.md` |
 | **Cursor** | [`waypoint.cursor.mdc`](./waypoint.cursor.mdc) | `.cursor/rules/waypoint.mdc` |
 | **Windsurf** | [`waypoint.windsurf.md`](./waypoint.windsurf.md) | `.windsurf/rules/waypoint.md` |
-| **GitHub Copilot** | [`copilot-instructions.md`](./copilot-instructions.md) | `.github/copilot-instructions.md` |
-| **Cline** | [`waypoint.cline.md`](./waypoint.cline.md) | `.clinerules/waypoint.md` |
+| **Trae** (ByteDance) | [`waypoint.trae.md`](./waypoint.trae.md) | `.trae/rules` (or `.traerules`) |
+| **OpenAI Codex** | [`AGENTS.md`](./AGENTS.md) | `AGENTS.md` (repo root) |
+| **Gemini CLI / Jules / Amp** | [`AGENTS.md`](./AGENTS.md) | `AGENTS.md` (repo root) |
 | **Aider** | [`waypoint.aider.md`](./waypoint.aider.md) | `CONVENTIONS.md` (load with `--read`) |
-| **JetBrains AI (Junie)** | [`waypoint.junie.md`](./waypoint.junie.md) | `.junie/guidelines.md` |
 | **Zed** | [`waypoint.zed.md`](./waypoint.zed.md) | `.rules` (repo root) |
 
 **Notes**
